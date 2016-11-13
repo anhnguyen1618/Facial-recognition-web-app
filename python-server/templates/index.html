@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.2.0.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Pacifico" />
+    <script type="text/javascript" src="/static/webcam.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet" type="text/css">
+    <title>Title</title>
+    <style>
+    body {
+        font-family: Open Sans, sans-serif;
+    }
+    
+    nav {
+        height: 80px;
+        font-size: 22px;
+        border-bottom-width: 0px !important;
+    }
+    
+    .navbar-inverse {
+        background-color: #fff!important;
+    }
+    
+    .navbar-right a {
+        padding: 30px !important;
+        color: #212121;
+        font-weight: 800;
+    }
+    
+    .navbar-right a:hover {
+        color: black!important;
+    }
+    
+    #cover {
+        height: 100vh;
+        width: 100%;
+        background-image: url("/static/cover.jpg");
+        background-size: 100% 100%;
+        background-attachment: fixed;
+        display: table;
+    }
+    
+    #cover h1 {
+        display: table-cell;
+        color: white !important;
+        font-size: 100px !important;
+        text-align: center;
+        vertical-align: middle;
+        font-family: 'Pacifico', cursive;
+    }
+    
+    .col-sm-2 {
+        text-align: right;
+    }
+    
+    #regis_form {
+        background-color: #263238;
+        color: white;
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+    
+    #register {
+        margin-top: 20px;
+    }
+    
+    #paralax {
+        background-image: url('/static/paralax.jpg');
+        background-attachment: fixed;
+        width: 100%;
+        height: 50vh;
+        display: table;
+        background-size: 100% 100%;
+    }
+    
+    #paralax h1 {
+        display: table-cell;
+        color: white !important;
+        font-size: 80px !important;
+        text-align: center;
+        vertical-align: middle;
+        font-family: 'Pacifico', cursive;
+    }
+    
+    #detection {
+        padding-top: 50px;
+        padding-bottom: 50px;
+        background-color: #212121;
+    }
+    
+    #verify {
+        margin-top: 20px;
+    }
+    
+    #result {
+        background-color: #00897b;
+        background-attachment: fixed;
+        width: 100%;
+        height: 100vh;
+        display: table;
+        background-size: 100% 100%;
+    }
+    
+    #result h1 {
+        color: white !important;
+        font-size: 100px !important;
+        text-align: center;
+    }
+    
+    #content {
+        display: table-cell;
+        vertical-align: middle;
+        font-family: 'Pacifico', cursive;
+    }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-inverse navbar-fixed-top " role="navigation">
+            <div id="nav" class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+                    <a class="navbar-brand"><img src="static/logo.jpg" width="80px"></a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="#regis_form">Register</a></li>
+                        <li><a href="#detection">Verify</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div id="cover">
+        <h1>Facial Recognition!</h1>
+    </div>
+    <div id="regis_form">
+        <div class="container">
+            <center>
+                <h2>Register</h2></center>
+            <form id="register" class="form-horizontal" action="/registerperson" enctype="multipart/form-data" method="post">
+                <div class="form-group">
+                    <label class="col-sm-2 col-md-offset-2"> Your name</label>
+                    <div class="col-md-5">
+                        <input type="text" class="form-control" name="name" id="name">
+                    </div>
+                    <div class="col-md-2"></div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 col-md-offset-2">Select images:</label>
+                    <div class="col-sm-5">
+                        <label class="btn btn-primary">
+                            + Upload image
+                            <input type="file" onchange="readURL(this);" style="display: none;" name="idPic" accept="image/*" id="image">
+                        </label>
+                        <label class="btn btn-success" id="take_photo">
+                            Open camera
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 col-md-offset-2">Preview Image</label>
+                    <div class="col-sm-5">
+                        <img id="blah" class="img-rounded" style="width: 120px" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 col-md-offset-2"> </label>
+                    <div class="col-sm-5">
+                        <input type="submit" class="btn btn-default">
+                    </div>
+                </div>
+            </form>
+            <center id="cam">
+                <div id="my_camera"></div>
+                <input type=button class="btn btn-info" style="margin-top: 30px" value="Take Snapshot" onClick="take_snapshot()">
+            </center>
+        </div>
+    </div>
+    <div id="paralax">
+        <h1>Face detector</h1>
+    </div>
+    <div id="detection">
+        <center>
+            <div id="detector"></div>
+            <button class="btn btn-danger" id="verify">Verify access</button>
+        </center>
+    </div>
+    <div id="final"></div>
+    <script>
+    $("#blah").hide();
+    $('#cam').hide();
+
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                $("#blah").show();
+                $('#blah').attr('src', e.target.result)
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    Webcam.set({
+        width: 700,
+        height: 450,
+        image_format: 'jpeg',
+        jpeg_quality: 100,
+        flip_horiz: true,
+    });
+    Webcam.attach('#my_camera');
+    Webcam.attach('#detector');
+
+
+
+    function take_snapshot() {
+        // take snapshot and get image data
+        Webcam.snap(function(data_uri) {
+            $('#blah').attr('src', data_uri);
+            $("#blah").show();
+            Webcam.upload(data_uri, '/uploadpic', function(code, text) {
+                console.log('test');
+            });
+        });
+    }
+    $('#take_photo').click(function(event) {
+        if ($('#take_photo').text().trim() === "Open camera") {
+            $('#take_photo').text("x Close camera");
+        } else {
+            $('#take_photo').text("Open camera");
+        }
+        $('#cam').toggle();
+    });
+    $("#register").submit(function(event) {
+        event.preventDefault();
+        var formData = new FormData(this);
+        $.ajax({
+            url: '/registerperson',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(text) {
+                if (text) {
+                    alert("Register successfully");
+                } else {
+                    alert("Something is wrong with your registration");
+                }
+            }
+        });
+        $(this).trigger('reset');
+        $("#blah").hide();
+    });
+
+    $('#verify').click(function(event) {
+        Webcam.snap(function(data_uri) {
+            $('#final').html("");
+            $('#final').append('<div id="result"><div id="content"></div></div>');
+            $('#content').html("<h1>Waiting...</h1>");
+            $(window).scrollTop($(document).height());
+            Webcam.upload(data_uri, '/authenticate', function(code, data) {
+                var info = JSON.parse(data);
+                if (info.name) {
+                    var emotion = info.emotion;
+                    var index = info.index;
+                    var name = info.name;
+                    $('#content').html("<h1>Welcome " + name + " !</h1>" + "<h1>Your emotion is " + emotion + "</h1>");
+                } else {
+                    $('#content').html("<h1>Access denied!</h1>");
+                }
+
+            });
+        });
+    });
+    </script>
+</body>
+
+</html>
